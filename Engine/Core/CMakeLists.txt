@@ -1,0 +1,44 @@
+
+SET(_TARGET DuskCore)
+
+ADD_LIBRARY(${_TARGET} "")
+
+FILE(GLOB_RECURSE 
+    _PUBLIC
+    "${CMAKE_CURRENT_SOURCE_DIR}/Public/*.cpp"
+    "${CMAKE_CURRENT_SOURCE_DIR}/Public/*.c"
+    "${CMAKE_CURRENT_SOURCE_DIR}/Public/*.hpp"
+    "${CMAKE_CURRENT_SOURCE_DIR}/Public/*.h"
+)
+
+FILE(GLOB_RECURSE 
+    _PRIVATE  
+    "${CMAKE_CURRENT_SOURCE_DIR}/Private/*.cpp"
+    "${CMAKE_CURRENT_SOURCE_DIR}/Private/*.c"
+    "${CMAKE_CURRENT_SOURCE_DIR}/Private/*.hpp"
+    "${CMAKE_CURRENT_SOURCE_DIR}/Private/*.h"
+)
+
+TARGET_INCLUDE_DIRECTORIES(
+    ${_TARGET}
+    PRIVATE "${CMAKE_CURRENT_SOURCE_DIR}/Private"
+    PUBLIC "${CMAKE_CURRENT_SOURCE_DIR}/Public"
+)
+
+TARGET_SOURCES(
+    ${_TARGET}
+    PRIVATE ${_PUBLIC}
+    PUBLIC ${_PRIVATE}
+)
+
+TARGET_LINK_LIBRARIES(
+    ${_TARGET}
+    glm
+    SDL2::SDL2
+)
+
+TARGET_COMPILE_FEATURES(
+    ${_TARGET} 
+    PRIVATE
+        cxx_std_17
+)
