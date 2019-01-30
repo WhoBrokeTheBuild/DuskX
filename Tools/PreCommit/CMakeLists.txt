@@ -19,6 +19,7 @@ TARGET_SOURCES(
 TARGET_LINK_LIBRARIES(
     ${_TARGET}
     PRIVATE
+        Threads::Threads
         $<$<AND:$<CXX_COMPILER_ID:GNU>,$<VERSION_LESS:$<CXX_COMPILER_VERSION>,9.0>>:stdc++fs>
 )
 
@@ -27,10 +28,15 @@ FILE(GENERATE
     INPUT "${CMAKE_CURRENT_SOURCE_DIR}/pre-commit.in"
 )
 
+IF(NOT WIN32)
+    SET(SET_EXECUTABLE_COMMAND chmod +x "${CMAKE_SOURCE_DIR}/.git/hooks/pre-commit")
+ENDIF()
+
 ADD_CUSTOM_COMMAND(
     TARGET ${_TARGET} POST_BUILD
     BYPRODUCTS "${CMAKE_SOURCE_DIR}/.git/hooks/pre-commit"
     COMMAND ${CMAKE_COMMAND} -E copy_if_different
         "${CMAKE_CURRENT_BINARY_DIR}/pre-commit.$<CONFIG>"
         "${CMAKE_SOURCE_DIR}/.git/hooks/pre-commit"
+    COMMAND ${SET_EXECUTABLE_COMMAND}
 )
