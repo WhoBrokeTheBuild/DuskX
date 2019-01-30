@@ -4,18 +4,18 @@ ADD_LIBRARY(${target} "")
 
 FILE(GLOB_RECURSE
     _PUBLIC
-    "${CMAKE_CURRENT_SOURCE_DIR}/Public/*.cpp"
-    "${CMAKE_CURRENT_SOURCE_DIR}/Public/*.c"
-    "${CMAKE_CURRENT_SOURCE_DIR}/Public/*.hpp"
-    "${CMAKE_CURRENT_SOURCE_DIR}/Public/*.h"
+    Public/*.cpp
+    Public/*.c
+    Public/*.hpp
+    Public/*.h
 )
 
 FILE(GLOB_RECURSE
     _PRIVATE
-    "${CMAKE_CURRENT_SOURCE_DIR}/Private/*.cpp"
-    "${CMAKE_CURRENT_SOURCE_DIR}/Private/*.c"
-    "${CMAKE_CURRENT_SOURCE_DIR}/Private/*.hpp"
-    "${CMAKE_CURRENT_SOURCE_DIR}/Private/*.h"
+    Private/*.cpp
+    Private/*.c
+    Private/*.hpp
+    Private/*.h
 )
 
 TARGET_INCLUDE_DIRECTORIES(
@@ -73,6 +73,7 @@ IF(BUILD_TESTS)
                 ${target}
                 GTest::gtest
                 GTest::gtest_main
+                $<$<CXX_COMPILER_ID:MSVC>:msvcrt>
         )
 
         FILE(RELATIVE_PATH folder ${CMAKE_SOURCE_DIR} ${CMAKE_CURRENT_SOURCE_DIR})

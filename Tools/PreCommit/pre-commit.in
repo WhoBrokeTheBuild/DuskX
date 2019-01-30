@@ -1,0 +1,3 @@
+#!/bin/sh
+
+$<TARGET_FILE:PreCommit>

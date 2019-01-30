@@ -15,7 +15,11 @@ namespace fs = std::experimental::filesystem;
 std::string exec(const char* cmd) {
     std::array<char, 128> buffer;
     std::string result;
+#if defined(_WIN32)
+    std::unique_ptr<FILE, decltype(&_pclose)> pipe(_popen(cmd, "r"), _pclose);
+#else
     std::unique_ptr<FILE, decltype(&pclose)> pipe(popen(cmd, "r"), pclose);
+#endif
     if (!pipe) {
         throw std::runtime_error("popen() failed!");
     }
@@ -25,13 +29,13 @@ std::string exec(const char* cmd) {
     return result;
 }
 
-int main(int argc, char** argv) 
+int main(int argc, char** argv)
 {
     auto fileList = exec("git ls-tree -r master --name-only");
     std::regex reFindTabs(R"((\t))");
     std::regex reFindCarriageReturn(R"((\r))");
     std::regex reFindTrailingSpace(R"(([ \t]+(?=\n|$)))");
-    
+
     bool noTabs = true;
     bool noCarriageReturns = true;
     bool noTrailingSpace = true;

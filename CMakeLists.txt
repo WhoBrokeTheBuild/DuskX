@@ -7,6 +7,8 @@ ENDIF()
 
 PROJECT(Dusk VERSION 0.0.1)
 
+SET(CMAKE_CXX_STANDARD 17)
+
 ###
 ### Options
 ###
@@ -127,7 +129,6 @@ IF(BUILD_THIRDPARTY)
         WORKING_DIRECTORY "${CMAKE_BINARY_DIR}/ThirdParty"
         RESULT_VARIABLE result
     )
-
     IF(result)
         MESSAGE("${result}")
         MESSAGE(FATAL_ERROR "Failed to build ThirdParty projects")
