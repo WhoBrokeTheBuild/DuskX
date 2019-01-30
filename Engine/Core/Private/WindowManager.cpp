@@ -6,12 +6,12 @@ NullWindowManager NULL_WINDOW_MANAGER;
 
 WindowManager * WindowManager::s_Inst = &NULL_WINDOW_MANAGER;
 
-WindowManager * WindowManager::Inst() 
+WindowManager * WindowManager::Inst()
 {
     return s_Inst;
 }
 
-WindowManager::WindowManager() 
+WindowManager::WindowManager()
 {
     s_Inst = this;
 }

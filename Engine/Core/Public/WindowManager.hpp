@@ -16,7 +16,7 @@ class WindowManager
 {
 public:
 
-    /** 
+    /**
      * Disable Copy Constructor and Assignment Operator
      */
     WindowManager(const WindowManager&) = delete;
@@ -24,24 +24,24 @@ public:
 
     /**
      * Return an instance to the current window manager.
-     * 
+     *
      * @return The current window manager, or nullptr.
      */
     static WindowManager * Inst();
 
     /**
      * Open a new window, and return it's handle.
-     * 
+     *
      * @param  title  The title for the new window.
      * @param  size   The size in pixels for the new window.
-     * 
+     *
      * @return A handle to the new window.
      */
     virtual WindowHandle Open(const wstring& title, const ivec2& size) = 0;
 
     /**
      * Close a window.
-     * 
+     *
      * @param  window  A handle to the window to close.
      */
     virtual bool Close(WindowHandle handle) = 0;
@@ -51,14 +51,14 @@ public:
      */
     virtual void PollEvents() = 0;
 
-	/**
-	* Swap the back and front buffers.
-	*/
-	virtual void SwapBuffers(WindowHandle handle) = 0;
+    /**
+    * Swap the back and front buffers.
+    */
+    virtual void SwapBuffers(WindowHandle handle) = 0;
 
     /**
      * Return the number of open windows.
-     * 
+     *
      * @return The number of open windows.
      */
     virtual size_t Count() const = 0;
@@ -87,7 +87,7 @@ public:
 
     void PollEvents() override;
 
-	void SwapBuffers(WindowHandle handle) override;
+    void SwapBuffers(WindowHandle handle) override;
 
     size_t Count() const override;
 

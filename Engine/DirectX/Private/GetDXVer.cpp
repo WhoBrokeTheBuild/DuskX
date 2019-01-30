@@ -14,7 +14,7 @@ namespace dusk {
  *
  * @param  strDirectXVersion  The buffer to store the version string in. Should be at least 10 characters.
  * @param  cchDirectXVersion  The size of strDirectXVersion.
- * 
+ *
  * @return S_OK if the version was found, E_FAIL otherwise.
  */
 HRESULT GetDXVersion(TCHAR* strDirectXVersion, int cchDirectXVersion)
@@ -37,7 +37,7 @@ HRESULT GetDXVersion(TCHAR* strDirectXVersion, int cchDirectXVersion)
     bool bSuccessGettingMinor = false;
     bool bSuccessGettingLetter = false;
 
-    // Init COM.  COM may fail if its already been inited with a different 
+    // Init COM.  COM may fail if its already been inited with a different
     // concurrency model.  And if it fails you shouldn't release it.
     hr = CoInitialize(NULL);
     bCleanupCOM = SUCCEEDED(hr);

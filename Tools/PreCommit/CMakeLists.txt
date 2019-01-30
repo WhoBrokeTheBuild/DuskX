@@ -1,19 +1,14 @@
 
-SET(_TARGET "Demo")
+SET(_TARGET PreCommit)
 
 ADD_EXECUTABLE(${_TARGET} "")
 
-FILE(GLOB_RECURSE
+FILE(GLOB_RECURSE 
     _PRIVATE
     "${CMAKE_CURRENT_SOURCE_DIR}/Private/*.cpp"
     "${CMAKE_CURRENT_SOURCE_DIR}/Private/*.c"
     "${CMAKE_CURRENT_SOURCE_DIR}/Private/*.hpp"
     "${CMAKE_CURRENT_SOURCE_DIR}/Private/*.h"
-)
-
-TARGET_INCLUDE_DIRECTORIES(
-    ${_TARGET}
-    PRIVATE "${CMAKE_CURRENT_SOURCE_DIR}/Private"
 )
 
 TARGET_SOURCES(
@@ -24,14 +19,12 @@ TARGET_SOURCES(
 TARGET_LINK_LIBRARIES(
     ${_TARGET}
     PRIVATE
-        DuskCore
-        DuskUtil
-        ${DUSK_WINDOW_LIBRARY}
-        ${DUSK_GRAPHICS_LIBRARY}
+        $<$<AND:$<CXX_COMPILER_ID:GNU>,$<VERSION_LESS:$<CXX_COMPILER_VERSION>,9.0>>:stdc++fs>
 )
 
-TARGET_COMPILE_FEATURES(
-    ${_TARGET}
-    PRIVATE
-        cxx_std_17
+ADD_CUSTOM_TARGET(
+    install_${_TARGET} ALL
+    COMMAND ${CMAKE_COMMAND} -E copy_if_different 
+        $<TARGET_FILE:${_TARGET}>
+        ${CMAKE_SOURCE_DIR}/.git/hooks/pre-commit 
 )

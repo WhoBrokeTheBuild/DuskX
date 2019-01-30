@@ -10,7 +10,7 @@ TARGET_LINK_LIBRARIES(
         DuskUtil
         glfw
         ${DUSK_GRAPHICS_LIBRARY}
-		$<$<CXX_COMPILER_ID:MSVC>:msvcrt>
+        $<$<CXX_COMPILER_ID:MSVC>:msvcrt>
 )
 
 TARGET_COMPILE_DEFINITIONS(

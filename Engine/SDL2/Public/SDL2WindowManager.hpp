@@ -29,7 +29,7 @@ public:
 
     void PollEvents() override;
 
-	void SwapBuffers(WindowHandle handle) override;
+    void SwapBuffers(WindowHandle handle) override;
 
     size_t Count() const override;
 

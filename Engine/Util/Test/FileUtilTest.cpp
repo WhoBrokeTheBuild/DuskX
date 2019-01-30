@@ -98,7 +98,7 @@ TEST(PathClean, RelativePath)
     ASSERT_EQ(PathClean(L"path/to/./file"), L"path/to/file");
 }
 
-int main(int argc, char **argv) 
+int main(int argc, char **argv)
 {
     ::testing::InitGoogleTest(&argc, argv);
     return RUN_ALL_TESTS();

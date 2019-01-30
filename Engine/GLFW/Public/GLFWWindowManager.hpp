@@ -15,33 +15,33 @@
 
 namespace dusk {
 
-class GLFWWindowManager final : public WindowManager 
+class GLFWWindowManager final : public WindowManager
 {
 public:
 
-	GLFWWindowManager();
+    GLFWWindowManager();
 
-	~GLFWWindowManager();
+    ~GLFWWindowManager();
 
-	WindowHandle Open(const wstring& title, const ivec2& size) override;
+    WindowHandle Open(const wstring& title, const ivec2& size) override;
 
-	bool Close(WindowHandle handle) override;
+    bool Close(WindowHandle handle) override;
 
-	WindowHandle GetHandle(GLFWwindow * window);
+    WindowHandle GetHandle(GLFWwindow * window);
 
-	void PollEvents() override;
+    void PollEvents() override;
 
-	void SwapBuffers(WindowHandle handle) override;
+    void SwapBuffers(WindowHandle handle) override;
 
-	size_t Count() const override;
+    size_t Count() const override;
 
 private:
 
-	static const int MAX_WINDOWS = 32;
+    static const int MAX_WINDOWS = 32;
 
-	size_t _WindowCount = 0;
+    size_t _WindowCount = 0;
 
-	GLFWwindow * _Windows[MAX_WINDOWS];
+    GLFWwindow * _Windows[MAX_WINDOWS];
 
 }; // GLFWWindowManager
 

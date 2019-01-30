@@ -16,7 +16,7 @@ wstring StringToWString(const string& str)
 
     return result;
 #else
-    
+    return L"";
 #endif
 }
 
@@ -28,11 +28,11 @@ string WStringToString(const std::wstring& wstr)
     string result;
     result.resize(length);
 
-	WideCharToMultiByte(CP_UTF8, 0, wstr.c_str(), (int)wstr.size(), result.data(), (int)result.size(), NULL, NULL);
+    WideCharToMultiByte(CP_UTF8, 0, wstr.c_str(), (int)wstr.size(), result.data(), (int)result.size(), NULL, NULL);
 
     return result;
 #else
-    wctomb_s()
+    return "";
 #endif
 }
 

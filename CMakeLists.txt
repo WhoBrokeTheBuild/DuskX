@@ -25,7 +25,7 @@ SET(OPENGL_VERSION "4.1" CACHE STRING "Minimum supported OpenGL Version")
 
 SET(WINDOW_API "SDL2" CACHE STRING "API to use for managing windows. 'SDL2', 'GLFW', 'DirectX', 'Android'")
 SET_PROPERTY(
-    CACHE WINDOW_API 
+    CACHE WINDOW_API
     PROPERTY STRINGS
     "SDL2"
     "GLFW"
@@ -35,7 +35,7 @@ SET_PROPERTY(
 
 SET(GRAPHICS_API "OpenGL" CACHE STRING "API to use for rendering. 'OpenGL', 'Vulkan', or 'DirectX'")
 SET_PROPERTY(
-    CACHE GRAPHICS_API 
+    CACHE GRAPHICS_API
     PROPERTY STRINGS
     "OpenGL"
     "Vulkan"
@@ -104,9 +104,9 @@ IF(BUILD_THIRDPARTY)
     FILE(MAKE_DIRECTORY "${CMAKE_BINARY_DIR}/ThirdParty")
 
     EXECUTE_PROCESS(
-        COMMAND ${CMAKE_COMMAND} -G "${CMAKE_GENERATOR}" 
-            "${CMAKE_SOURCE_DIR}/ThirdParty" 
-            -DNEED_SDL2=${DUSK_WINDOW_SDL2} 
+        COMMAND ${CMAKE_COMMAND} -G "${CMAKE_GENERATOR}"
+            "${CMAKE_SOURCE_DIR}/ThirdParty"
+            -DNEED_SDL2=${DUSK_WINDOW_SDL2}
             -DNEED_GLFW=${DUSK_WINDOW_GLFW}
             -DNEED_ANDROID=${DUSK_WINDOW_ANDROID}
         WORKING_DIRECTORY "${CMAKE_BINARY_DIR}/ThirdParty"
@@ -137,7 +137,7 @@ IF(BUILD_THIRDPARTY)
 
     SET(glm_DIR "${CMAKE_BINARY_DIR}/ThirdParty/glm")
     SET(GTest_DIR "${CMAKE_BINARY_DIR}/ThirdParty/GTest/lib/cmake/GTest")
-    
+
     IF(DUSK_WINDOW_SDL2)
         IF(WIN32)
             SET(SDL2_DIR "${CMAKE_BINARY_DIR}/ThirdParty/SDL2/cmake")
@@ -168,8 +168,8 @@ ENDIF()
 
 INCLUDE(CMake/Module.cmake)
 
+ADD_SUBDIRECTORY(Tools)
 ADD_SUBDIRECTORY(Engine)
 ADD_SUBDIRECTORY(Demo)
-ADD_SUBDIRECTORY(Tools)
 
 SET_PROPERTY(DIRECTORY ${CMAKE_SOURCE_DIR} PROPERTY VS_STARTUP_PROJECT "Demo")
