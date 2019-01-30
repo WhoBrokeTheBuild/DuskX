@@ -51,6 +51,11 @@ public:
      */
     virtual void PollEvents() = 0;
 
+	/**
+	* Swap the back and front buffers.
+	*/
+	virtual void SwapBuffers(WindowHandle handle) = 0;
+
     /**
      * Return the number of open windows.
      * 
@@ -81,6 +86,8 @@ public:
     bool Close(WindowHandle handle) override;
 
     void PollEvents() override;
+
+	void SwapBuffers(WindowHandle handle) override;
 
     size_t Count() const override;
 

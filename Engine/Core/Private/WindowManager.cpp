@@ -34,6 +34,9 @@ bool NullWindowManager::Close(WindowHandle handle)
 void NullWindowManager::PollEvents()
 { }
 
+void NullWindowManager::SwapBuffers(WindowHandle handle)
+{ }
+
 size_t NullWindowManager::Count() const
 {
     return 0;

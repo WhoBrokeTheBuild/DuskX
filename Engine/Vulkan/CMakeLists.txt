@@ -1,0 +1,10 @@
+
+SET(_TARGET DuskVulkan)
+
+DuskModule(${_TARGET})
+
+TARGET_COMPILE_DEFINITIONS(
+    ${_TARGET}
+    PUBLIC
+        -DDUSK_GRAPHICS_VULKAN
+)
