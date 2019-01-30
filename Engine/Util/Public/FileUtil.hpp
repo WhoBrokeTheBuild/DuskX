@@ -1,8 +1,6 @@
 #ifndef DUSK_FILE_UTIL_HPP
 #define DUSK_FILE_UTIL_HPP
 
-#include <Util.hpp>
-
 #include <string>
 
 namespace dusk {
@@ -20,7 +18,7 @@ using std::wstring;
  * 
  * @return The base filename of the path, or the path
  */
-DUSKUTILAPI wstring PathBasename(const wstring& path);
+wstring PathBasename(const wstring& path);
 
 /** 
  * Returns the directory of the given path.
@@ -34,7 +32,7 @@ DUSKUTILAPI wstring PathBasename(const wstring& path);
  * 
  * @return The directory of the path, or "./"
  */
-DUSKUTILAPI wstring PathDirname(const wstring& path);
+wstring PathDirname(const wstring& path);
 
 /** 
  * Returns the extension of the given path.
@@ -49,7 +47,7 @@ DUSKUTILAPI wstring PathDirname(const wstring& path);
  * 
  * @return The extension of the path, or ""
  */
-DUSKUTILAPI wstring FileExtension(const wstring& path);
+wstring FileExtension(const wstring& path);
 
 /** 
  * Returns the cleaned, simplified version of the given path.
@@ -62,7 +60,7 @@ DUSKUTILAPI wstring FileExtension(const wstring& path);
  * 
  * @return The cleaned, simplified version of the path, or ""
  */
-DUSKUTILAPI wstring PathClean(wstring path);
+wstring PathClean(wstring path);
 
 }
 

@@ -4,7 +4,6 @@
 #include <cstdint>
 #include <string>
 
-#include <Core.hpp>
 #include <Math.hpp>
 
 namespace dusk {
@@ -13,7 +12,7 @@ using std::wstring;
 
 typedef uint32_t WindowHandle;
 
-DUSKCOREAPI class WindowManager
+class WindowManager
 {
 public:
 

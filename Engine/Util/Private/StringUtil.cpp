@@ -1,24 +1,39 @@
 #include "StringUtil.hpp"
 
-#include <locale>
-#include <codecvt>
+#include <Platform.hpp>
 
 namespace dusk {
 
-wstring StringToWString(const std::string& str)
+wstring StringToWString(const string& str)
 {
-    using convertType = std::codecvt_utf8<wchar_t>;
-    std::wstring_convert<convertType, wchar_t> converter;
+#if defined(_WIN32)
+    int length = MultiByteToWideChar(CP_UTF8, 0, str.c_str(), (int)str.size(), NULL, NULL);
 
-    return converter.from_bytes(str);
+    wstring result;
+    result.resize(length);
+
+    MultiByteToWideChar(CP_UTF8, 0, str.c_str(), (int)str.size(), result.data(), (int)result.size());
+
+    return result;
+#else
+    
+#endif
 }
 
 string WStringToString(const std::wstring& wstr)
 {
-    using convertType = std::codecvt_utf8<wchar_t>;
-    std::wstring_convert<convertType, wchar_t> converter;
+#if defined(_WIN32)
+    int length = WideCharToMultiByte(CP_UTF8, 0, wstr.c_str(), (int)wstr.size(), NULL, NULL, NULL, NULL);
 
-    return converter.to_bytes(wstr);
+    string result;
+    result.resize(length);
+
+	WideCharToMultiByte(CP_UTF8, 0, wstr.c_str(), (int)wstr.size(), result.data(), (int)result.size(), NULL, NULL);
+
+    return result;
+#else
+    wctomb_s()
+#endif
 }
 
 }

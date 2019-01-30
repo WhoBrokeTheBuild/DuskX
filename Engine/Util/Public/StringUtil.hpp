@@ -1,8 +1,6 @@
 #ifndef STRING_UTIL_HPP
 #define STRING_UTIL_HPP
 
-#include <Util.hpp>
-
 #include <string>
 
 namespace dusk {
@@ -17,7 +15,7 @@ using std::wstring;
  * 
  * @return The converted wide string
  */
-DUSKUTILAPI wchar_t * StringToWString(const char * str);
+wstring StringToWString(const string& str);
 
 /**
  * Convert a std::wstring to a std::string
@@ -26,7 +24,7 @@ DUSKUTILAPI wchar_t * StringToWString(const char * str);
  * 
  * @return The converted std::string
  */
-DUSKUTILAPI char * WStringToString(const wchar_t * wstr);
+string WStringToString(const wstring& wstr);
 
 }
 

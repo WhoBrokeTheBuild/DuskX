@@ -1,13 +1,12 @@
 #ifndef DUSK_SDL2_WINDOW_HPP
 #define DUSK_SDL2_WINDOW_HPP
 
-#include <Desktop.hpp>
 #include <WindowManager.hpp>
 #include <SDL.h>
 
 namespace dusk {
 
-DUSKDESKTOPAPI class SDL2WindowManager final : public WindowManager
+class SDL2WindowManager final : public WindowManager
 {
 public:
 

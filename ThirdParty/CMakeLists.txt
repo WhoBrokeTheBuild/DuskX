@@ -1,4 +1,4 @@
-CMAKE_MINIMUM_REQUIRED(VERSION 3.8)
+CMAKE_MINIMUM_REQUIRED(VERSION 3.13)
 
 INCLUDE(ExternalProject)
 
@@ -16,6 +16,28 @@ ExternalProject_Add(
     CMAKE_ARGS          -DCMAKE_INSTALL_PREFIX=${_glm_DIR}
                         -DGLM_TEST_ENABLE=OFF
     BUILD_COMMAND       ""
+    UPDATE_COMMAND      ""
+    TEST_COMMAND        ""
+)
+
+# GSL
+
+# GTest
+
+SET(_GSL_DIR "${CMAKE_BINARY_DIR}/GSL")
+SET(_GSL_SOURCE_DIR "${CMAKE_BINARY_DIR}/GSL_src")
+SET(_GSL_BINARY_DIR "${CMAKE_BINARY_DIR}/GSL_bin")
+
+ExternalProject_Add(
+    ThirdParty_GSL
+    GIT_REPOSITORY      "https://github.com/Microsoft/GSL.git"
+    GIT_TAG             "v2.0.0"
+    GIT_SHALLOW         TRUE
+    SOURCE_DIR          "${_GSL_SOURCE_DIR}"
+    BINARY_DIR          "${_GSL_BINARY_DIR}"
+    CMAKE_ARGS          -DCMAKE_INSTALL_PREFIX=${_GSL_DIR}
+    BUILD_COMMAND       ""
+    INSTALL_COMMAND     ${CMAKE_COMMAND} --build . --target install --config Release
     UPDATE_COMMAND      ""
     TEST_COMMAND        ""
 )
