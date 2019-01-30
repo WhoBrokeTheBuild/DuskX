@@ -33,7 +33,9 @@ int main(int argc, char** argv)
 {
     auto fileList = exec("git ls-tree -r master --name-only");
     std::regex reFindTabs(R"((\t))");
+#if !defined(_WIN32)
     std::regex reFindCarriageReturn(R"((\r))");
+#endif
     std::regex reFindTrailingSpace(R"(([ \t]+(?=\n|$)))");
 
     bool noTabs = true;
@@ -48,7 +50,7 @@ int main(int argc, char** argv)
         std::error_code ec;
         uintmax_t size = fs::file_size(filename, ec);
         if (!ec) {
-            std::ifstream file(filename);
+            std::ifstream file(filename, std::ifstream::binary);
             std::string data(size, '\0');
             file.read(&data[0], size);
 
@@ -59,11 +61,13 @@ int main(int argc, char** argv)
                 noTabs = false;
             }
 
+#if !defined(_WIN32)
             std::regex_search(data, sm, reFindCarriageReturn);
             if (!sm.empty()) {
                 fprintf(stderr, "File has carriage returns '%s'\n", filename.c_str());
                 noCarriageReturns = false;
             }
+#endif
 
             std::regex_search(data, sm, reFindTrailingSpace, std::regex_constants::match_not_eol);
             if (!sm.empty()) {
