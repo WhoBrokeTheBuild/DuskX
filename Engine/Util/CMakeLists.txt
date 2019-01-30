@@ -1,7 +1,7 @@
 
 SET(_TARGET DuskUtil)
 
-ADD_LIBRARY(${_TARGET} "")
+ADD_LIBRARY(${_TARGET} SHARED "")
 
 FILE(GLOB_RECURSE 
     _PUBLIC
@@ -27,13 +27,14 @@ TARGET_INCLUDE_DIRECTORIES(
 
 TARGET_SOURCES(
     ${_TARGET}
-    PRIVATE ${_PUBLIC}
-    PUBLIC ${_PRIVATE}
+    PRIVATE ${_PRIVATE}
+    PUBLIC ${_PUBLIC}
 )
 
 TARGET_LINK_LIBRARIES(
     ${_TARGET}
     PUBLIC
+        $<$<AND:$<CXX_COMPILER_ID:GNU>,$<VERSION_LESS:$<CXX_COMPILER_VERSION>,9.0>>:stdc++fs>
 )
 
 TARGET_COMPILE_FEATURES(
@@ -60,7 +61,11 @@ IF(BUILD_TESTS)
                 ${_TARGET}
                 GTest::gtest
                 GTest::gtest_main
-                stdc++fs
+        )
+        ADD_TEST(
+            NAME ${_name}
+            COMMAND ${_name}
+            WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
         )
     ENDFOREACH()
 ENDIF()

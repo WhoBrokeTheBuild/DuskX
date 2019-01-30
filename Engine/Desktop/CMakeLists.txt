@@ -1,5 +1,5 @@
 
-SET(_TARGET DuskCore)
+SET(_TARGET DuskDesktop)
 
 ADD_LIBRARY(${_TARGET} SHARED "")
 
@@ -34,7 +34,11 @@ TARGET_SOURCES(
 TARGET_LINK_LIBRARIES(
     ${_TARGET}
     PUBLIC
-        glm
+        DuskCore
+        DuskUtil
+        SDL2::SDL2
+    INTERFACE
+        SDL2::SDL2main
 )
 
 TARGET_COMPILE_FEATURES(

@@ -23,9 +23,10 @@ TARGET_SOURCES(
 
 TARGET_LINK_LIBRARIES(
     ${_TARGET}
-    DuskCore
-    DuskUtil
-    SDL2::SDL2main
+    PRIVATE
+        DuskCore
+        DuskDesktop
+        DuskUtil
 )
 
 TARGET_COMPILE_FEATURES(

@@ -1,10 +1,11 @@
-#pragma once
+#ifndef DUSK_FILE_UTIL_HPP
+#define DUSK_FILE_UTIL_HPP
+
+#include <Util.hpp>
 
 #include <string>
 
 namespace dusk {
-
-namespace util {
 
 using std::wstring;
 
@@ -15,11 +16,11 @@ using std::wstring;
  *   Basename("/path/to/file.txt"); // file.txt
  *   Basename("C:\Path\To\file.txt"); // file.txt
  * 
- * @param  Input  A filepath
+ * @param  path  A filepath
  * 
  * @return The base filename of the path, or the path
  */
-wstring PathBasename(const wstring& path);
+DUSKUTILAPI wstring PathBasename(const wstring& path);
 
 /** 
  * Returns the directory of the given path.
@@ -29,26 +30,26 @@ wstring PathBasename(const wstring& path);
  *   Basename("/path/to/file.txt"); // /path/to/
  *   Basename("C:\Path\To\file.txt"); // C:\Path\To\
  * 
- * @param  Input  A filepath
+ * @param  path  A filepath
  * 
  * @return The directory of the path, or "./"
  */
-wstring PathDirname(const wstring& path);
+DUSKUTILAPI wstring PathDirname(const wstring& path);
 
 /** 
  * Returns the extension of the given path.
  * 
  * Example:
- *   Basename("/path/to/file.txt"); // txt
- *   Basename("/path/to/file.test.txt"); // txt
+ *   Basename("/path/to/file.txt"); // .txt
+ *   Basename("/path/to/file.test.txt"); // .txt
  *   Basename("/path/to/file"); // 
  *   Basename("/path/to/"); // 
  * 
- * @param  Input  A filepath
+ * @param  path  A filepath
  * 
  * @return The extension of the path, or ""
  */
-wstring FileExtension(const wstring& path);
+DUSKUTILAPI wstring FileExtension(const wstring& path);
 
 /** 
  * Returns the cleaned, simplified version of the given path.
@@ -57,12 +58,12 @@ wstring FileExtension(const wstring& path);
  *   Basename("./path/to/../to//file.txt"); // ./path/to/file.txt
  *   Basename("C:\Path/To\\..\To/file.txt"); // C:\Path\To\file.txt
  * 
- * @param  Input  A filepath
+ * @param  path  A filepath
  * 
  * @return The cleaned, simplified version of the path, or ""
  */
-wstring PathClean(wstring path);
+DUSKUTILAPI wstring PathClean(wstring path);
 
 }
 
-}
+#endif // DUSK_FILE_UTIL_HPP

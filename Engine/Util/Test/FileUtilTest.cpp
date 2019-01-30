@@ -1,7 +1,7 @@
 #include "FileUtil.hpp"
 #include <gtest/gtest.h>
 
-using namespace dusk::util;
+using namespace dusk;
 
 TEST(PathBasename, Empty)
 {
@@ -67,15 +67,16 @@ TEST(FileExtension, NoExtension)
     ASSERT_EQ(FileExtension(L""), L"");
     ASSERT_EQ(FileExtension(L"FileWithNoExt"), L"");
     ASSERT_EQ(FileExtension(L"/path/to/file"), L"");
+    ASSERT_EQ(FileExtension(L"C:\\path\\to\\file"), L"");
 }
 
 TEST(FileExtension, AbsolutePath)
 {
-    ASSERT_EQ(FileExtension(L"/path/to/file.txt"), L"txt");
-    ASSERT_EQ(FileExtension(L"/path/with space/file.JPEG"), L"JPEG");
+    ASSERT_EQ(FileExtension(L"/path/to/file.txt"), L".txt");
+    ASSERT_EQ(FileExtension(L"/path/with space/file.JPEG"), L".JPEG");
 
-    ASSERT_EQ(FileExtension(L"C:\\path\\to\\file"), L"C:\\path\\to\\");
-    ASSERT_EQ(FileExtension(L"C:\\path\\with space\\file"), L"C:\\path\\with space\\");
+    ASSERT_EQ(FileExtension(L"C:\\path\\to\\file.txt"), L".txt");
+    ASSERT_EQ(FileExtension(L"C:\\path\\with space\\file.JPEG"), L".JPEG");
 }
 
 TEST(PathClean, Empty)
@@ -99,7 +100,6 @@ TEST(PathClean, RelativePath)
 
 int main(int argc, char **argv) 
 {
-
     ::testing::InitGoogleTest(&argc, argv);
     return RUN_ALL_TESTS();
 }
