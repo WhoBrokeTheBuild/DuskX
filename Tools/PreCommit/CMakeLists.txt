@@ -20,7 +20,6 @@ TARGET_LINK_LIBRARIES(
     ${_TARGET}
     PRIVATE
         Threads::Threads
-        $<$<AND:$<CXX_COMPILER_ID:GNU>,$<VERSION_LESS:$<CXX_COMPILER_VERSION>,9.0>>:stdc++fs>
 )
 
 FILE(GENERATE
