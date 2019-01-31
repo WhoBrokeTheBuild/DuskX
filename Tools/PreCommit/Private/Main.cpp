@@ -38,46 +38,55 @@ int main(int argc, char** argv)
 
     std::vector<std::thread> threads;
 
+    auto checkFile = [&noTabs, &noCarriageReturns, &noTrailingSpace](std::string filename)
+    {
+        std::array<char, 1024 * 1024> buffer;
+        
+        size_t pivot = filename.find_last_of('.');
+        std::string ext = filename.substr(pivot);
+
+        if (ext != ".h" && ext != ".hpp" 
+            && ext != ".c" && ext != ".cpp"
+            && ext != ".txt" && ext != ".cmake") {
+            return;
+        }
+        
+        std::regex reFindTabs(R"((\t))");
+        std::regex reFindTrailingSpace(R"(([ \t]+(?=\n|$)))");
+#if !defined(_WIN32)
+        std::regex reFindCarriageReturn(R"((\r))");
+#endif
+
+        std::ifstream file(filename, std::ifstream::binary);
+
+        file.read(&buffer[0], buffer.size());
+        buffer[file.tellg()] = '\0';
+
+        std::cmatch cm;
+        std::regex_search(buffer.data(), cm, reFindTabs);
+        if (!cm.empty()) {
+            fprintf(stderr, "File has tabs '%s'\n", filename.c_str());
+            noTabs = false;
+        }
+
+#if !defined(_WIN32)
+        std::regex_search(buffer.data(), cm, reFindCarriageReturn);
+        if (!cm.empty()) {
+            fprintf(stderr, "File has carriage returns '%s'\n", filename.c_str());
+            noCarriageReturns = false;
+        }
+#endif
+
+        std::regex_search(buffer.data(), cm, reFindTrailingSpace, std::regex_constants::match_not_eol);
+        if (!cm.empty()) {
+            fprintf(stderr, "File has trailing whitespace '%s'\n", filename.c_str());
+            noTrailingSpace = false;
+        }
+    };
+
     std::stringstream ss(fileList);
     for (std::string filename; std::getline(ss, filename); ) {
-        threads.push_back(std::thread(
-            [&noTabs, &noCarriageReturns, &noTrailingSpace](std::string filename)
-            {
-                std::regex reFindTabs(R"((\t))");
-                std::regex reFindTrailingSpace(R"(([ \t]+(?=\n|$)))");
-#               if !defined(_WIN32)
-                    std::regex reFindCarriageReturn(R"((\r))");
-#               endif
-
-                std::ifstream file(filename, std::ifstream::binary | std::ifstream::ate);
-                size_t size = file.tellg();
-                file.seekg(0, file.beg);
-
-                std::string data(size, '\0');
-                file.read(&data[0], size);
-
-                std::smatch sm;
-                std::regex_search(data, sm, reFindTabs);
-                if (!sm.empty()) {
-                    fprintf(stderr, "File has tabs '%s'\n", filename.c_str());
-                    noTabs = false;
-                }
-
-#               if !defined(_WIN32)
-                    std::regex_search(data, sm, reFindCarriageReturn);
-                    if (!sm.empty()) {
-                        fprintf(stderr, "File has carriage returns '%s'\n", filename.c_str());
-                        noCarriageReturns = false;
-                    }
-#               endif
-
-                std::regex_search(data, sm, reFindTrailingSpace, std::regex_constants::match_not_eol);
-                if (!sm.empty()) {
-                    fprintf(stderr, "File has trailing whitespace '%s'\n", filename.c_str());
-                    noTrailingSpace = false;
-                }
-            }
-        , filename));
+        threads.push_back(std::thread(checkFile, filename));
     }
 
     for (auto& t : threads) {
