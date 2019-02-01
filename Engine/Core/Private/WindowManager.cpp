@@ -42,4 +42,35 @@ size_t NullWindowManager::Count() const
     return 0;
 }
 
+#if defined(DUSK_GRAPHICS_OPENGL)
+
+void * NullGetProcAddress(const char *)
+{
+    return nullptr;
+}
+
+GLADloadfunc NullWindowManager::GetOpenGLLoadFunc() const
+{
+    return (GLADloadfunc)NullGetProcAddress;
+}
+
+#elif defined(DUSK_GRAPHICS_VULKAN)
+
+const char ** NullWindowManager::GetVulkanRequiredExtensions(uint32_t & count) const
+{
+    count = 0;
+    return nullptr;
+}
+
+bool NullWindowManager::CreateVulkanWindowSurface(
+    VkInstance instance,
+    WindowHandle window,
+    VkSurfaceKHR * surface)
+{
+    surface = nullptr;
+    return false;
+}
+
+#endif
+
 } // namespace dusk

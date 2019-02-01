@@ -4,6 +4,13 @@
 
 #include <SDL_syswm.h>
 
+#if defined(DUSK_GRAPHICS_OPENGL)
+#include <SDL_opengl.h>
+#elif defined(DUSK_GRAPHICS_VULKAN)
+#include <SDL_vulkan.h>
+#endif
+
+
 namespace dusk {
 
 SDL2WindowManager::SDL2WindowManager()
@@ -128,33 +135,19 @@ WindowHandle SDL2WindowManager::Open(const wstring& title, const ivec2& size)
         return 0;
     }
 
-    int version = gladLoadGL((GLADloadfunc)SDL_GL_GetProcAddress);
-    if (!version) {
-        fprintf(stderr, "Failed to load OpenGL symbols\n");
-
+    if (!OpenGLInit()) {
         SDL_DestroyWindow(_Windows[index]);
         _Windows[index] = nullptr;
         return 0;
     }
-
-    printf("OpenGL %d.%d\n", GLAD_VERSION_MAJOR(version), GLAD_VERSION_MINOR(version));
-
-    OpenGLInit();
 
 #elif defined(DUSK_GRAPHICS_VULKAN)
 
-    int version = gladLoaderLoadVulkan(NULL, NULL, NULL);
-    if (!version) {
-        fprintf(stderr, "Failed to load Vulkan symbols\n");
-
+    if (!VulkanInit()) {
         SDL_DestroyWindow(_Windows[index]);
         _Windows[index] = nullptr;
         return 0;
     }
-
-    printf("Vulkan %d.%d\n", GLAD_VERSION_MAJOR(version), GLAD_VERSION_MINOR(version));
-
-    VulkanInit();
 
 #elif defined(DUSK_GRAPHICS_DIRECTX)
 
@@ -210,7 +203,7 @@ void SDL2WindowManager::PollEvents()
                 for (int index = 0; index < MAX_WINDOWS; ++index) {
                     if (_Windows[index]) {
                         if (evt.window.windowID == SDL_GetWindowID(_Windows[index])) {
-                            Close(evt.window.windowID);
+                            Close(index + 1);
                             break;
                         }
                     }
@@ -240,5 +233,60 @@ size_t SDL2WindowManager::Count() const
 {
     return _WindowCount;
 }
+
+#if defined(DUSK_GRAPHICS_OPENGL)
+
+GLADloadfunc SDL2WindowManager::GetOpenGLLoadFunc() const
+{
+    return (GLADloadfunc)SDL_GL_GetProcAddress;
+}
+
+#elif defined(DUSK_GRAPHICS_VULKAN)
+
+const char ** SDL2WindowManager::GetVulkanRequiredExtensions(uint32_t & count) const
+{
+    // FIXME: Dynamic array?
+    static const char * extensions[64];
+
+    // FIXME: Get main window
+    int index = 0;
+
+    if (index < 0 || index >= MAX_WINDOWS) {
+        return nullptr;
+    }
+
+    if (_Windows[index]) {
+        SDL_bool result = SDL_Vulkan_GetInstanceExtensions(_Windows[index], &count, extensions);
+        if (result) {
+            return extensions;
+        }
+    }
+
+    return nullptr;
+}
+
+bool SDL2WindowManager::CreateVulkanWindowSurface(
+    VkInstance instance,
+    WindowHandle window,
+    VkSurfaceKHR * surface)
+{
+    int index = window - 1;
+
+    if (index < 0 || index >= MAX_WINDOWS) {
+        return false;
+    }
+
+    if (_Windows[index]) {
+        SDL_bool result = SDL_Vulkan_CreateSurface(_Windows[index], instance, surface);
+        if (!result) {
+            fprintf(stderr, "SDL_CreateVulkanSurface failed: %s\n", SDL_GetError());
+        }
+        return (result == SDL_TRUE);
+    }
+
+    return false;
+}
+
+#endif
 
 } // namespace dusk

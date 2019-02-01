@@ -74,36 +74,19 @@ WindowHandle GLFWWindowManager::Open(const wstring& title, const ivec2& size)
 
 #if defined(DUSK_GRAPHICS_OPENGL)
 
-    int version = gladLoadGL((GLADloadfunc)glfwGetProcAddress);
-    if (!version) {
-        fprintf(stderr, "Failed to load OpenGL symbols\n");
-
+    if (!OpenGLInit()) {
         glfwDestroyWindow(_Windows[index]);
         _Windows[index] = nullptr;
         return 0;
     }
-
-    printf("OpenGL %d.%d\n", GLAD_VERSION_MAJOR(version), GLAD_VERSION_MINOR(version));
-
-    OpenGLInit();
 
 #elif defined(DUSK_GRAPHICS_VULKAN)
 
-    int version = gladLoaderLoadVulkan(NULL, NULL, NULL);
-    if (!version) {
-        fprintf(stderr, "Failed to load Vulkan symbols\n");
-
+    if (!VulkanInit()) {
         glfwDestroyWindow(_Windows[index]);
         _Windows[index] = nullptr;
         return 0;
     }
-
-    printf("Vulkan %d.%d\n", GLAD_VERSION_MAJOR(version), GLAD_VERSION_MINOR(version));
-
-    unsigned int glfwExtensionCount;
-    const char ** glfwExtensions = glfwGetRequiredInstanceExtensions(&glfwExtensionCount);
-
-    VulkanInit(glfwExtensions, glfwExtensionCount);
 
 #endif
 
@@ -177,5 +160,40 @@ size_t GLFWWindowManager::Count() const
 {
     return _WindowCount;
 }
+
+#if defined(DUSK_GRAPHICS_OPENGL)
+
+GLADloadfunc GLFWWindowManager::GetOpenGLLoadFunc() const
+{
+    return glfwGetProcAddress;
+}
+
+#elif defined(DUSK_GRAPHICS_VULKAN)
+
+const char ** GLFWWindowManager::GetVulkanRequiredExtensions(uint32_t & count) const
+{
+    return glfwGetRequiredInstanceExtensions(&count);
+}
+
+bool GLFWWindowManager::CreateVulkanWindowSurface(
+    VkInstance instance,
+    WindowHandle window,
+    VkSurfaceKHR * surface)
+{
+    int index = window - 1;
+
+    if (index < 0 || index >= MAX_WINDOWS) {
+        return false;
+    }
+
+    if (_Windows[index]) {
+        VkResult result = glfwCreateWindowSurface(instance, _Windows[index], nullptr, surface);
+        return (result == VK_SUCCESS);
+    }
+
+    return false;
+}
+
+#endif
 
 } // namespace dusk

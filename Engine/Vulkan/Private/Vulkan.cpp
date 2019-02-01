@@ -1,5 +1,8 @@
 #include "Vulkan.hpp"
 
+#include <App.hpp>
+
+#include <stdio.h>
 #include <vector>
 
 namespace dusk {
@@ -17,12 +20,26 @@ std::vector<VkImage> swapChainImages;
 VkCommandPool commandPool;
 std::vector<VkCommandBuffer> presentCommandBuffers;
 
-void VulkanInit(const char ** requiredExtensions, uint32_t requiredExtensionCount)
+bool VulkanInit()
 {
-    VkApplicationInfo appInfo = {};
+    auto app = App::Inst();
+    auto wm = WindowManager::Inst();
+
+    int version = gladLoaderLoadVulkan(NULL, NULL, NULL);
+    if (!version) {
+        fprintf(stderr, "Failed to load Vulkan symbols\n");
+        return false;
+    }
+
+    printf("Vulkan %d.%d\n", GLAD_VERSION_MAJOR(version), GLAD_VERSION_MINOR(version));
+
+    VkApplicationInfo appInfo = { };
     appInfo.sType = VK_STRUCTURE_TYPE_APPLICATION_INFO;
-    appInfo.pApplicationName = "Dusk";
-    appInfo.applicationVersion = VK_MAKE_VERSION(1, 0, 0);
+    appInfo.pApplicationName = app->GetName();
+    appInfo.applicationVersion = VK_MAKE_VERSION(
+        app->GetVersionMajor(),
+        app->GetVersionMinor(),
+        app->GetVersionPatch());
     appInfo.pEngineName = "Dusk";
     appInfo.engineVersion = VK_MAKE_VERSION(
         DUSK_VERSION_MAJOR,
@@ -41,7 +58,10 @@ void VulkanInit(const char ** requiredExtensions, uint32_t requiredExtensionCoun
         printf("\t%s\n", extension.extensionName);
     }
 
-    VkInstanceCreateInfo createInfo = {};
+    uint32_t requiredExtensionCount;
+    const char ** requiredExtensions = wm->GetVulkanRequiredExtensions(requiredExtensionCount);
+
+    VkInstanceCreateInfo createInfo = { };
     createInfo.sType = VK_STRUCTURE_TYPE_INSTANCE_CREATE_INFO;
     createInfo.pApplicationInfo = &appInfo;
     createInfo.enabledExtensionCount = requiredExtensionCount;
@@ -49,18 +69,15 @@ void VulkanInit(const char ** requiredExtensions, uint32_t requiredExtensionCoun
 
     if (vkCreateInstance(&createInfo, nullptr, &instance) != VK_SUCCESS) {
         fprintf(stderr, "Failed to create Vulkan instance\n");
-        return;
+        return false;
     }
-}
 
-VkInstance VulkanGetInstance()
-{
-    return instance;
-}
+    if (!wm->CreateVulkanWindowSurface(instance, 1, &windowSurface) != VK_SUCCESS) {
+        fprintf(stderr, "Failed to create Vulkan window surface\n");
+        return false;
+    }
 
-void VulkanRender()
-{
-
+    return true;
 }
 
 } // namespace dusk

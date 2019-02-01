@@ -16,7 +16,14 @@ wstring StringToWString(const string& str)
 
     return result;
 #else
-    return L"";
+    size_t length = std::mbstowcs(nullptr, str.c_str(), 0);
+
+    wstring result;
+    result.resize(length);
+
+    std::mbstowcs(result.data(), str.c_str(), (int)result.size());
+
+    return result;
 #endif
 }
 
@@ -32,7 +39,17 @@ string WStringToString(const std::wstring& wstr)
 
     return result;
 #else
-    return "";
+    std::mbstate_t state = std::mbstate_t();
+    const wchar_t * wptr = wstr.c_str();
+
+    size_t length = std::wcsrtombs(nullptr, &wptr, 0, &state);
+
+    string result;
+    result.resize(length);
+
+    std::wcsrtombs(result.data(), &wptr, (int)result.size(), &state);
+
+    return result;
 #endif
 }
 

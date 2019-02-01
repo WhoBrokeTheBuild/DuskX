@@ -3,15 +3,7 @@
 
 #include <WindowManager.hpp>
 
-#if defined(DUSK_GRAPHICS_OPENGL)
-#include <OpenGL.hpp>
-#elif defined(DUSK_GRAPHICS_VULKAN)
-#include <Vulkan.hpp>
-#elif defined(DUSK_GRAPHICS_DIRECTX)
-#include <DirectX.hpp>
-#endif
-
-#include <GLFW\glfw3.h>
+#include <GLFW/glfw3.h>
 
 namespace dusk {
 
@@ -34,6 +26,21 @@ public:
     void SwapBuffers(WindowHandle handle) override;
 
     size_t Count() const override;
+
+#if defined(DUSK_GRAPHICS_OPENGL)
+
+    GLADloadfunc GetOpenGLLoadFunc() const override;
+
+#elif defined(DUSK_GRAPHICS_VULKAN)
+
+    const char ** GetVulkanRequiredExtensions(uint32_t & count) const override;
+
+    bool CreateVulkanWindowSurface(
+        VkInstance instance,
+        WindowHandle window,
+        VkSurfaceKHR * surface) override;
+
+#endif
 
 private:
 

@@ -41,16 +41,16 @@ int main(int argc, char** argv)
     auto checkFile = [&noTabs, &noCarriageReturns, &noTrailingSpace](std::string filename)
     {
         std::array<char, 1024 * 1024> buffer;
-        
+
         size_t pivot = filename.find_last_of('.');
         std::string ext = filename.substr(pivot);
 
-        if (ext != ".h" && ext != ".hpp" 
+        if (ext != ".h" && ext != ".hpp"
             && ext != ".c" && ext != ".cpp"
             && ext != ".txt" && ext != ".cmake") {
             return;
         }
-        
+
         std::regex reFindTabs(R"((\t))");
         std::regex reFindTrailingSpace(R"(([ \t]+(?=\n|$)))");
 #if !defined(_WIN32)

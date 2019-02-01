@@ -6,7 +6,14 @@ DuskModule(${_TARGET})
 TARGET_LINK_LIBRARIES(
     ${_TARGET}
     PUBLIC
+        DuskCore
         OpenGL::GL
+)
+
+TARGET_LINK_LIBRARIES(
+    DuskCore
+    PUBLIC
+        ${_TARGET}
 )
 
 STRING(REPLACE "." ";" _VERSION_LIST ${OPENGL_VERSION})

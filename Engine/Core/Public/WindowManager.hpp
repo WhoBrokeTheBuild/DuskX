@@ -1,10 +1,18 @@
 #ifndef DUSK_WINDOW_MANAGER_HPP
 #define DUSK_WINDOW_MANAGER_HPP
 
-#include <cstdint>
-#include <string>
+#if defined(DUSK_GRAPHICS_OPENGL)
+#include <OpenGL.hpp>
+#elif defined(DUSK_GRAPHICS_VULKAN)
+#include <Vulkan.hpp>
+#elif defined(DUSK_GRAPHICS_DIRECTX)
+#include <DirectX.hpp>
+#endif
 
 #include <Math.hpp>
+
+#include <cstdint>
+#include <string>
 
 namespace dusk {
 
@@ -12,8 +20,12 @@ using std::wstring;
 
 typedef uint32_t WindowHandle;
 
+class App;
+
 class WindowManager
 {
+    friend class App;
+
 public:
 
     /**
@@ -63,11 +75,28 @@ public:
      */
     virtual size_t Count() const = 0;
 
+#if defined(DUSK_GRAPHICS_OPENGL)
+
+    virtual GLADloadfunc GetOpenGLLoadFunc() const = 0;
+
+#elif defined(DUSK_GRAPHICS_VULKAN)
+
+    virtual const char ** GetVulkanRequiredExtensions(uint32_t & count) const = 0;
+
+    virtual bool CreateVulkanWindowSurface(
+        VkInstance instance,
+        WindowHandle window,
+        VkSurfaceKHR * surface) = 0;
+
+#endif // DUSK_GRAPHICS_VULKAN
+
 protected:
 
     WindowManager();
 
     virtual ~WindowManager();
+
+private:
 
     static WindowManager * s_Inst;
 
@@ -90,6 +119,21 @@ public:
     void SwapBuffers(WindowHandle handle) override;
 
     size_t Count() const override;
+
+#if defined(DUSK_GRAPHICS_OPENGL)
+
+    GLADloadfunc GetOpenGLLoadFunc() const override;
+
+#elif defined(DUSK_GRAPHICS_VULKAN)
+
+    const char ** GetVulkanRequiredExtensions(uint32_t & count) const override;
+
+    bool CreateVulkanWindowSurface(
+        VkInstance instance,
+        WindowHandle window,
+        VkSurfaceKHR * surface) override;
+
+#endif
 
 }; // class NullWindowManager
 

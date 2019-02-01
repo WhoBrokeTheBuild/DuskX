@@ -5,9 +5,7 @@
 
 namespace dusk {
 
-void VulkanInit(const char ** requiredExtensions, uint32_t requiredExtensionCount);
-
-VkInstance VulkanGetInstance();
+bool VulkanInit();
 
 } // namespace dusk
 

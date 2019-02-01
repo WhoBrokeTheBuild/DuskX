@@ -1,23 +1,14 @@
-#if defined(DUSK_WINDOW_SDL2)
-#include <SDL2WindowManager.hpp>
-#elif defined(DUSK_WINDOW_GLFW)
-#include <GLFWWindowManager.hpp>
-#endif
-
-#include <WindowManager.hpp>
+#include <App.hpp>
 
 using namespace std;
 using namespace dusk;
 
 int main(int argc, char ** argv)
 {
-#if defined(DUSK_WINDOW_SDL2)
-    auto syswm = new SDL2WindowManager();
-#elif defined(DUSK_WINDOW_GLFW)
-    auto syswm = new GLFWWindowManager();
-#else
-    void * syswm = nullptr;
-#endif
+    dusk::App app;
+    app.SetName(PROJECT_NAME);
+    app.SetVersion(PROJECT_VERSION);
+    app.Init();
 
     auto wm = WindowManager::Inst();
 
@@ -28,7 +19,6 @@ int main(int argc, char ** argv)
         wm->SwapBuffers(h);
     }
 
-    delete syswm;
-
+    app.Term();
     return 0;
 }

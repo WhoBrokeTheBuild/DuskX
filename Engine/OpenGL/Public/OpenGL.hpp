@@ -5,7 +5,7 @@
 
 namespace dusk {
 
-void OpenGLInit();
+bool OpenGLInit();
 
 } // namespace dusk
 

@@ -91,7 +91,7 @@ IF(NEED_GLFW)
     SET(_GLFW_BINARY_DIR "${CMAKE_BINARY_DIR}/GLFW_bin")
 
     ExternalProject_Add(
-        ThirdParty_SDL2
+        ThirdParty_GLFW
         GIT_REPOSITORY      "https://github.com/glfw/glfw.git"
         GIT_TAG             "3.2.1"
         GIT_SHALLOW         TRUE

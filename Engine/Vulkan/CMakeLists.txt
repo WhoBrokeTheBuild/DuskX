@@ -3,8 +3,20 @@ SET(_TARGET DuskVulkan)
 
 DuskModule(${_TARGET})
 
+TARGET_LINK_LIBRARIES(
+    ${_TARGET}
+    PUBLIC
+        DuskCore
+)
+
 TARGET_COMPILE_DEFINITIONS(
     ${_TARGET}
     PUBLIC
         -DDUSK_GRAPHICS_VULKAN
+)
+
+TARGET_LINK_LIBRARIES(
+    DuskCore
+    PUBLIC
+        ${_TARGET}
 )
