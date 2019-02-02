@@ -66,34 +66,34 @@ public:
 
     /**
      * Get the Application name.
-     * 
+     *
      * @return The Application name.
      */
     virtual const char * GetName() const;
     /**
      * Get the Application version.
-     * 
+     *
      * @return The Application version.
      */
     virtual const char * GetVersion() const;
 
     /**
      * Get the Major portion of the Application version.
-     * 
+     *
      * @return The Major portion of the Application version.
      */
     virtual int GetVersionMajor() const;
 
     /**
      * Get the Minor portion of the Application version.
-     * 
+     *
      * @return The Minor portion of the Application version.
      */
     virtual int GetVersionMinor() const;
 
     /**
      * Get the Patch portion of the Application version.
-     * 
+     *
      * @return The Patch portion of the Application version.
      */
     virtual int GetVersionPatch() const;

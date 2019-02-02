@@ -245,8 +245,8 @@ GLADloadfunc SDL2WindowManager::GetOpenGLLoadFunc() const
 
 const char ** SDL2WindowManager::GetVulkanRequiredExtensions(uint32_t & count) const
 {
-    // FIXME: Dynamic array?
     static const char * extensions[64];
+    count = sizeof(extensions) / sizeof(extensions[0]);
 
     // FIXME: Get main window
     int index = 0;
@@ -257,9 +257,11 @@ const char ** SDL2WindowManager::GetVulkanRequiredExtensions(uint32_t & count) c
 
     if (_Windows[index]) {
         SDL_bool result = SDL_Vulkan_GetInstanceExtensions(_Windows[index], &count, extensions);
-        if (result) {
-            return extensions;
+        if (!result) {
+            fprintf(stderr, "SDL_Vulkan_GetInstanceExtensions failed: %s\n", SDL_GetError());
+            return nullptr;
         }
+        return extensions;
     }
 
     return nullptr;

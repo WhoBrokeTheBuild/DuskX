@@ -53,13 +53,18 @@ bool VulkanInit()
     std::vector<VkExtensionProperties> availableExtensions(availableExtensionCount);
     vkEnumerateInstanceExtensionProperties(nullptr, &availableExtensionCount, availableExtensions.data());
 
-    printf("Vulkan Extensions:\n");
+    printf("Available Vulkan Extensions:\n");
     for (const auto& extension : availableExtensions) {
         printf("\t%s\n", extension.extensionName);
     }
 
     uint32_t requiredExtensionCount;
     const char ** requiredExtensions = wm->GetVulkanRequiredExtensions(requiredExtensionCount);
+
+    printf("Required Vulkan Extensions:\n");
+    for (unsigned i = 0; i < requiredExtensionCount; ++i) {
+        printf("\t%s\n", requiredExtensions[i]);
+    }
 
     VkInstanceCreateInfo createInfo = { };
     createInfo.sType = VK_STRUCTURE_TYPE_INSTANCE_CREATE_INFO;

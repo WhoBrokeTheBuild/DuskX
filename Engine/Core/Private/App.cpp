@@ -15,7 +15,7 @@ App * App::Inst()
     return s_Inst;
 }
 
-App::App() 
+App::App()
 {
     s_Inst = this;
 }
@@ -40,7 +40,7 @@ void App::SetVersion(const char * version)
 bool App::Init()
 {
     printf("Initializing %s version %s\n", GetName(), GetVersion());
-    
+
 #if defined(DUSK_WINDOW_SDL2)
     _WindowManager = new SDL2WindowManager();
 #elif defined(DUSK_WINDOW_GLFW)
@@ -56,27 +56,27 @@ void App::Term()
     _WindowManager = nullptr;
 }
 
-const char * App::GetName() const 
+const char * App::GetName() const
 {
     return _Name;
 }
 
-const char * App::GetVersion() const 
+const char * App::GetVersion() const
 {
     return _Version;
 }
 
-int App::GetVersionMajor() const 
+int App::GetVersionMajor() const
 {
     return _VersionMajor;
 }
 
-int App::GetVersionMinor() const 
+int App::GetVersionMinor() const
 {
     return _VersionMinor;
 }
 
-int App::GetVersionPatch() const 
+int App::GetVersionPatch() const
 {
     return _VersionPatch;
 }
