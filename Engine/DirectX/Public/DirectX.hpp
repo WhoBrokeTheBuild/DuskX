@@ -7,7 +7,7 @@
 
 namespace dusk {
 
-void InitDirectX();
+bool DirectXInit(HWND hwnd);
 
 HRESULT GetDXVersion(TCHAR* strDirectXVersion, int cchDirectXVersion);
 

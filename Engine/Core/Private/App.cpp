@@ -1,11 +1,5 @@
 #include "App.hpp"
 
-#if defined(DUSK_WINDOW_SDL2)
-#include <SDL2WindowManager.hpp>
-#elif defined(DUSK_WINDOW_GLFW)
-#include <GLFWWindowManager.hpp>
-#endif
-
 namespace dusk {
 
 App * App::s_Inst = nullptr;
@@ -45,6 +39,8 @@ bool App::Init()
     _WindowManager = new SDL2WindowManager();
 #elif defined(DUSK_WINDOW_GLFW)
     _WindowManager = new GLFWWindowManager();
+#elif defined(DUSK_WINDOW_WIN32)
+    _WindowManager = new Win32WindowManager();
 #endif
 
     return true;

@@ -1,4 +1,4 @@
-#include <DirectX.hpp>
+#include "DirectX.hpp"
 
 #include <stdio.h>
 #include <tchar.h>
@@ -19,8 +19,6 @@ namespace dusk {
  */
 HRESULT GetDXVersion(TCHAR* strDirectXVersion, int cchDirectXVersion)
 {
-    bool bGotDirectXVersion = false;
-
     // Init values to unknown
     if (strDirectXVersion && cchDirectXVersion > 0) {
         strDirectXVersion[0] = 0;

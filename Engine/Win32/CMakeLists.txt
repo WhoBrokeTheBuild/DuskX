@@ -1,5 +1,5 @@
 
-SET(_TARGET DuskSDL2)
+SET(_TARGET DuskWin32)
 
 DuskModule(${_TARGET})
 
@@ -8,17 +8,14 @@ TARGET_LINK_LIBRARIES(
     PUBLIC
         DuskCore
         DuskUtil
-        SDL2::SDL2
         ${DUSK_GRAPHICS_LIBRARY}
         $<$<CXX_COMPILER_ID:MSVC>:msvcrt>
-    INTERFACE
-        SDL2::SDL2main
 )
 
 TARGET_COMPILE_DEFINITIONS(
     ${_TARGET}
     PUBLIC
-        -DDUSK_WINDOW_SDL2
+        -DDUSK_WINDOW_WIN32
 )
 
 TARGET_LINK_LIBRARIES(

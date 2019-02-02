@@ -3,6 +3,14 @@
 
 #include "WindowManager.hpp"
 
+#if defined(DUSK_WINDOW_SDL2)
+#include <SDL2WindowManager.hpp>
+#elif defined(DUSK_WINDOW_GLFW)
+#include <GLFWWindowManager.hpp>
+#elif defined(DUSK_WINDOW_WIN32)
+#include <Win32WindowManager.hpp>
+#endif
+
 #ifndef DUSK_VERSION_MAJOR
 #define DUSK_VERSION_MAJOR 0
 #endif

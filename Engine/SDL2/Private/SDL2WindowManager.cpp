@@ -10,7 +10,6 @@
 #include <SDL_vulkan.h>
 #endif
 
-
 namespace dusk {
 
 SDL2WindowManager::SDL2WindowManager()
@@ -151,12 +150,10 @@ WindowHandle SDL2WindowManager::Open(const wstring& title, const ivec2& size)
 
 #elif defined(DUSK_GRAPHICS_DIRECTX)
 
-    HWND hwnd = info.info.win.window;
-
-    TCHAR strDirectXVersion[10];
-    HRESULT hr = GetDXVersion(strDirectXVersion, sizeof(strDirectXVersion));
-    if (SUCCEEDED(hr)) {
-        printf("DirectX Version: %s\n", strDirectXVersion);
+    if (!DirectXInit(info.info.win.window)) {
+        SDL_DestroyWindow(_Windows[index]);
+        _Windows[index] = nullptr;
+        return 0;
     }
 
 #endif
