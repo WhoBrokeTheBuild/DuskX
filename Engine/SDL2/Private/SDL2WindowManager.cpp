@@ -148,14 +148,6 @@ WindowHandle SDL2WindowManager::Open(const wstring& title, const ivec2& size)
         return 0;
     }
 
-#elif defined(DUSK_GRAPHICS_DIRECTX)
-
-    if (!DirectXInit(info.info.win.window)) {
-        SDL_DestroyWindow(_Windows[index]);
-        _Windows[index] = nullptr;
-        return 0;
-    }
-
 #endif
 
     ++_WindowCount;

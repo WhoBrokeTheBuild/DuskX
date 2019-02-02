@@ -15,7 +15,7 @@ std::string exec(const char* cmd)
     std::array<char, 128> buffer;
     std::string result;
 #if defined(_WIN32)
-    std::unique_ptr<FILE, decltype(&_pclose)> pipe(_popen(cmd, "r"), _pclose);
+    std::unique_ptr<FILE, decltype(&_pclose)> pipe(_popen(cmd, "rt"), _pclose);
 #else
     std::unique_ptr<FILE, decltype(&pclose)> pipe(popen(cmd, "r"), pclose);
 #endif
@@ -40,8 +40,6 @@ int main(int argc, char** argv)
 
     auto checkFile = [&noTabs, &noCarriageReturns, &noTrailingSpace](std::string filename)
     {
-        std::array<char, 1024 * 1024> buffer;
-
         size_t pivot = filename.find_last_of('.');
         std::string ext = filename.substr(pivot);
 
@@ -57,36 +55,48 @@ int main(int argc, char** argv)
         std::regex reFindCarriageReturn(R"((\r))");
 #endif
 
-        std::ifstream file(filename, std::ifstream::binary);
+        std::ifstream file(filename, std::ifstream::binary | std::ifstream::ate);
+        if (!file) {
+            return;
+        }
 
+        size_t size = file.tellg();
+        file.seekg(0);
+
+        std::vector<char> buffer(size + 1);
         file.read(&buffer[0], buffer.size());
-        buffer[file.tellg()] = '\0';
+        buffer.back() = '\0';
 
         std::cmatch cm;
         std::regex_search(buffer.data(), cm, reFindTabs);
         if (!cm.empty()) {
-            fprintf(stderr, "File has tabs '%s'\n", filename.c_str());
+            printf("File has tabs '%s'\n", filename.c_str());
             noTabs = false;
         }
 
 #if !defined(_WIN32)
         std::regex_search(buffer.data(), cm, reFindCarriageReturn);
         if (!cm.empty()) {
-            fprintf(stderr, "File has carriage returns '%s'\n", filename.c_str());
+            printf("File has carriage returns '%s'\n", filename.c_str());
             noCarriageReturns = false;
         }
 #endif
 
         std::regex_search(buffer.data(), cm, reFindTrailingSpace, std::regex_constants::match_not_eol);
         if (!cm.empty()) {
-            fprintf(stderr, "File has trailing whitespace '%s'\n", filename.c_str());
+            printf("File has trailing whitespace '%s'\n", filename.c_str());
             noTrailingSpace = false;
         }
     };
 
+    std::vector<std::string> files;
     std::stringstream ss(fileList);
     for (std::string filename; std::getline(ss, filename); ) {
-        threads.push_back(std::thread(checkFile, filename));
+        files.push_back(filename);
+    }
+
+    for (const auto& file : files) {
+        threads.push_back(std::thread(checkFile, std::string(file)));
     }
 
     for (auto& t : threads) {
